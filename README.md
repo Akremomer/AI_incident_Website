@@ -23,6 +23,12 @@ AI Incident Intelligence Platform is a multi-service incident response workspace
 - Container and Kubernetes deployment scaffolding
 - CI workflow for frontend, AI service, and backend validation
 
+## Roadmap
+
+- Replace the Node mock incident store with the Go API for local dashboard flows
+- Persist incidents and analysis results in PostgreSQL
+- Add richer operational views for service ownership and escalation context
+
 ## Screenshots
 
 - `[Placeholder] Dashboard overview`
