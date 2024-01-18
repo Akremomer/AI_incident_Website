@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 interface Incident {
   id: string;
@@ -12,13 +12,30 @@ interface Incident {
 
 export default function App() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [draft, setDraft] = useState({ title: '', description: '', severity: 'Medium' });
+
+  const loadIncidents = async () => {
+    const response = await fetch('/api/incidents');
+    const data = await response.json();
+    setIncidents(data);
+  };
 
   useEffect(() => {
-    fetch('/api/incidents')
-      .then((response) => response.json())
-      .then((data) => setIncidents(data))
-      .catch((error) => console.error(error));
+    loadIncidents().catch((error) => console.error(error));
   }, []);
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    await fetch('/api/incidents', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(draft),
+    });
+    setDraft({ title: '', description: '', severity: 'Medium' });
+    setShowForm(false);
+    loadIncidents().catch((error) => console.error(error));
+  };
 
   return (
     <main className="dashboard">
@@ -26,11 +43,11 @@ export default function App() {
         <div>
           <p className="eyebrow">Incident Atlas</p>
           <h1>Command view for production alerts</h1>
-          <p className="copy">
-            Pulling incident summaries from the local API and wiring up the first live dashboard view.
-          </p>
+          <p className="copy">Adding incident capture so the dashboard can create records without leaving the page.</p>
         </div>
-        <button className="primary-button">Report incident</button>
+        <button className="primary-button" onClick={() => setShowForm(true)}>
+          Report incident
+        </button>
       </section>
 
       <section className="stats-grid">
@@ -43,8 +60,8 @@ export default function App() {
           <strong>{incidents.filter((incident) => incident.severity === 'High').length}</strong>
         </article>
         <article className="card">
-          <p className="card-label">Categories</p>
-          <strong>{new Set(incidents.map((incident) => incident.category)).size}</strong>
+          <p className="card-label">Open</p>
+          <strong>{incidents.filter((incident) => incident.status === 'Open').length}</strong>
         </article>
       </section>
 
@@ -68,6 +85,41 @@ export default function App() {
           </div>
         ))}
       </section>
+
+      {showForm ? (
+        <div className="modal-backdrop" onClick={() => setShowForm(false)}>
+          <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+            <p className="eyebrow">New incident</p>
+            <h2>Report issue</h2>
+            <form className="form-grid" onSubmit={handleSubmit}>
+              <input
+                required
+                value={draft.title}
+                onChange={(event) => setDraft({ ...draft, title: event.target.value })}
+                placeholder="Incident title"
+              />
+              <select
+                value={draft.severity}
+                onChange={(event) => setDraft({ ...draft, severity: event.target.value })}
+              >
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+              <textarea
+                required
+                rows={5}
+                value={draft.description}
+                onChange={(event) => setDraft({ ...draft, description: event.target.value })}
+                placeholder="Describe the impact and symptoms"
+              />
+              <button className="primary-button" type="submit">
+                Save incident
+              </button>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
