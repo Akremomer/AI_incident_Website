@@ -1,10 +1,25 @@
-const stats = [
-  { label: 'Active incidents', value: '12' },
-  { label: 'High priority', value: '03' },
-  { label: 'Responders online', value: '07' },
-];
+import { useEffect, useState } from 'react';
+
+interface Incident {
+  id: string;
+  title: string;
+  description: string;
+  severity: string;
+  status: string;
+  category: string;
+  createdAt: string;
+}
 
 export default function App() {
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+
+  useEffect(() => {
+    fetch('/api/incidents')
+      .then((response) => response.json())
+      .then((data) => setIncidents(data))
+      .catch((error) => console.error(error));
+  }, []);
+
   return (
     <main className="dashboard">
       <section className="hero">
@@ -12,19 +27,25 @@ export default function App() {
           <p className="eyebrow">Incident Atlas</p>
           <h1>Command view for production alerts</h1>
           <p className="copy">
-            Building the initial dashboard layout for triage, active incidents, and summary metrics.
+            Pulling incident summaries from the local API and wiring up the first live dashboard view.
           </p>
         </div>
         <button className="primary-button">Report incident</button>
       </section>
 
       <section className="stats-grid">
-        {stats.map((stat) => (
-          <article key={stat.label} className="card">
-            <p className="card-label">{stat.label}</p>
-            <strong>{stat.value}</strong>
-          </article>
-        ))}
+        <article className="card">
+          <p className="card-label">Active incidents</p>
+          <strong>{incidents.length}</strong>
+        </article>
+        <article className="card">
+          <p className="card-label">High priority</p>
+          <strong>{incidents.filter((incident) => incident.severity === 'High').length}</strong>
+        </article>
+        <article className="card">
+          <p className="card-label">Categories</p>
+          <strong>{new Set(incidents.map((incident) => incident.category)).size}</strong>
+        </article>
       </section>
 
       <section className="table-shell">
@@ -33,18 +54,19 @@ export default function App() {
             <p className="eyebrow">Queue</p>
             <h2>Incidents</h2>
           </div>
-          <span className="chip">Draft layout</span>
+          <span className="chip">{incidents.length} records</span>
         </div>
-        <div className="row">
-          <span>Database latency spike</span>
-          <span>High</span>
-          <span>Investigating</span>
-        </div>
-        <div className="row">
-          <span>Cache miss storm</span>
-          <span>Medium</span>
-          <span>Open</span>
-        </div>
+
+        {incidents.map((incident) => (
+          <div key={incident.id} className="row">
+            <div>
+              <strong>{incident.title}</strong>
+              <p className="row-copy">{incident.description}</p>
+            </div>
+            <span>{incident.severity}</span>
+            <span>{incident.status}</span>
+          </div>
+        ))}
       </section>
     </main>
   );
