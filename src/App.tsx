@@ -8,6 +8,12 @@ interface Incident {
   status: string;
   category: string;
   createdAt: string;
+  analysis?: {
+    summary: string;
+    probableCause: string;
+    recommendedAction: string;
+    severityScore: number;
+  } | null;
 }
 
 export default function App() {
@@ -35,6 +41,11 @@ export default function App() {
     });
     setDraft({ title: '', description: '', severity: 'Medium' });
     setShowForm(false);
+    loadIncidents().catch((error) => console.error(error));
+  };
+
+  const handleAnalyze = async (id: string) => {
+    await fetch(`/api/incidents/${id}/analyze`, { method: 'POST' });
     loadIncidents().catch((error) => console.error(error));
   };
 
@@ -95,6 +106,19 @@ export default function App() {
                   <span>{incident.category}</span>
                   <span>{new Date(incident.createdAt).toLocaleString()}</span>
                 </div>
+                {incident.analysis ? (
+                  <div className="analysis-panel">
+                    <p className="eyebrow">AI summary</p>
+                    <p className="detail-copy">{incident.analysis.summary}</p>
+                    <p className="analysis-footnote">
+                      {incident.analysis.probableCause} Recommendation: {incident.analysis.recommendedAction}
+                    </p>
+                  </div>
+                ) : (
+                  <button className="secondary-button" onClick={() => handleAnalyze(incident.id)}>
+                    Trigger AI analysis
+                  </button>
+                )}
               </div>
             ) : null}
           </div>

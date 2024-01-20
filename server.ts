@@ -14,6 +14,7 @@ async function startServer() {
       status: "Investigating",
       category: "Database",
       createdAt: new Date().toISOString(),
+      analysis: null,
     },
   ];
 
@@ -32,10 +33,29 @@ async function startServer() {
       status: "Open",
       category: "Triage",
       createdAt: new Date().toISOString(),
+      analysis: null,
     };
 
     incidents = [incident, ...incidents];
     res.status(201).json(incident);
+  });
+
+  app.post("/api/incidents/:id/analyze", (req, res) => {
+    const incident = incidents.find((entry) => entry.id === req.params.id);
+
+    if (!incident) {
+      return res.status(404).json({ error: "Incident not found" });
+    }
+
+    incident.status = "Analyzed";
+    incident.analysis = {
+      summary: `Investigating ${incident.title}`,
+      probableCause: "Temporary resource contention in the primary service path.",
+      recommendedAction: "Increase capacity and validate recent deploy changes.",
+      severityScore: incident.severity === "High" ? 8 : 6,
+    };
+
+    res.json(incident);
   });
 
   const vite = await createViteServer({

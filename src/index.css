@@ -69,6 +69,7 @@ h2 {
 }
 
 .primary-button,
+.secondary-button,
 .chip {
   border-radius: 999px;
   border: 0;
@@ -78,6 +79,14 @@ h2 {
   background: #5c7cff;
   color: white;
   padding: 14px 24px;
+  font-weight: 600;
+}
+
+.secondary-button {
+  margin-top: 18px;
+  background: rgba(92, 124, 255, 0.15);
+  color: #d7e0ff;
+  padding: 12px 18px;
   font-weight: 600;
 }
 
@@ -192,6 +201,18 @@ h2 {
   gap: 12px;
   color: #8ea0b2;
   font-size: 13px;
+}
+
+.analysis-panel {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.analysis-footnote {
+  margin: 14px 0 0;
+  color: #96a7b8;
+  line-height: 1.7;
 }
 
 .form-grid {
