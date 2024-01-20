@@ -13,6 +13,7 @@ interface Incident {
 export default function App() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [draft, setDraft] = useState({ title: '', description: '', severity: 'Medium' });
 
   const loadIncidents = async () => {
@@ -43,7 +44,7 @@ export default function App() {
         <div>
           <p className="eyebrow">Incident Atlas</p>
           <h1>Command view for production alerts</h1>
-          <p className="copy">Adding incident capture so the dashboard can create records without leaving the page.</p>
+          <p className="copy">Adding incident detail expansion so responders can inspect context inline.</p>
         </div>
         <button className="primary-button" onClick={() => setShowForm(true)}>
           Report incident
@@ -60,8 +61,8 @@ export default function App() {
           <strong>{incidents.filter((incident) => incident.severity === 'High').length}</strong>
         </article>
         <article className="card">
-          <p className="card-label">Open</p>
-          <strong>{incidents.filter((incident) => incident.status === 'Open').length}</strong>
+          <p className="card-label">Investigating</p>
+          <strong>{incidents.filter((incident) => incident.status === 'Investigating').length}</strong>
         </article>
       </section>
 
@@ -75,13 +76,27 @@ export default function App() {
         </div>
 
         {incidents.map((incident) => (
-          <div key={incident.id} className="row">
-            <div>
-              <strong>{incident.title}</strong>
-              <p className="row-copy">{incident.description}</p>
-            </div>
-            <span>{incident.severity}</span>
-            <span>{incident.status}</span>
+          <div key={incident.id} className="incident-block">
+            <button className="row row-button" onClick={() => setExpandedId(expandedId === incident.id ? null : incident.id)}>
+              <div>
+                <strong>{incident.title}</strong>
+                <p className="row-copy">{incident.description}</p>
+              </div>
+              <span>{incident.severity}</span>
+              <span>{incident.status}</span>
+            </button>
+
+            {expandedId === incident.id ? (
+              <div className="detail-card">
+                <p className="eyebrow">Incident detail</p>
+                <p className="detail-copy">{incident.description}</p>
+                <div className="detail-meta">
+                  <span>{incident.id}</span>
+                  <span>{incident.category}</span>
+                  <span>{new Date(incident.createdAt).toLocaleString()}</span>
+                </div>
+              </div>
+            ) : null}
           </div>
         ))}
       </section>
@@ -92,27 +107,13 @@ export default function App() {
             <p className="eyebrow">New incident</p>
             <h2>Report issue</h2>
             <form className="form-grid" onSubmit={handleSubmit}>
-              <input
-                required
-                value={draft.title}
-                onChange={(event) => setDraft({ ...draft, title: event.target.value })}
-                placeholder="Incident title"
-              />
-              <select
-                value={draft.severity}
-                onChange={(event) => setDraft({ ...draft, severity: event.target.value })}
-              >
+              <input required value={draft.title} onChange={(event) => setDraft({ ...draft, title: event.target.value })} placeholder="Incident title" />
+              <select value={draft.severity} onChange={(event) => setDraft({ ...draft, severity: event.target.value })}>
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
               </select>
-              <textarea
-                required
-                rows={5}
-                value={draft.description}
-                onChange={(event) => setDraft({ ...draft, description: event.target.value })}
-                placeholder="Describe the impact and symptoms"
-              />
+              <textarea required rows={5} value={draft.description} onChange={(event) => setDraft({ ...draft, description: event.target.value })} placeholder="Describe the impact and symptoms" />
               <button className="primary-button" type="submit">
                 Save incident
               </button>

@@ -131,6 +131,18 @@ h2 {
   color: #d9e3ee;
 }
 
+.incident-block + .incident-block {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.row-button {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
 .row strong {
   display: block;
   margin-bottom: 6px;
@@ -158,6 +170,28 @@ h2 {
   border-radius: 24px;
   background: #101923;
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.detail-card {
+  margin: 0 0 18px;
+  padding: 18px 20px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.detail-copy {
+  margin: 0;
+  color: #cfdae6;
+  line-height: 1.7;
+}
+
+.detail-meta {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #8ea0b2;
+  font-size: 13px;
 }
 
 .form-grid {
