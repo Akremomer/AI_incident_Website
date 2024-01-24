@@ -287,7 +287,7 @@ export default function App() {
                     {loading ? (
                       <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">Pulling incidents from the watch grid...</td></tr>
                     ) : filteredIncidents.length === 0 ? (
-                      <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No incidents match the current search or severity filter.</td></tr>
+                      <tr><td colSpan={5} className="px-6 py-12 text-center text-sm text-[var(--text-muted)]">No incidents match the active search terms or severity filter.</td></tr>
                     ) : (
                       filteredIncidents.map((incident, index) => (
                         <IncidentRow key={incident.id} incident={incident} index={index} onAnalyze={() => handleAnalyze(incident.id)} isAnalyzing={analyzingId === incident.id} />
