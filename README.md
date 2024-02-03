@@ -1,16 +1,21 @@
 # Incident Atlas
 
-Early workspace setup for an incident response dashboard.
+Incident response dashboard for triage, queue visibility, and AI-assisted analysis.
 
-## Planned Stack
+## Tech Stack
 
-- React
-- TypeScript
+- React + TypeScript
 - Vite
-- Express
-- FastAPI
-- Go
+- Express mock API
 
-## Status
+## Current Scope
 
-Project scaffold in progress.
+- Incident list view
+- Incident reporting modal
+- Mock analysis workflow
+
+## Planned Services
+
+- Python AI service
+- Go API service
+- Container and Kubernetes deployment support
