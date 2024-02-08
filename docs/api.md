@@ -10,6 +10,14 @@ Returns a list of all incidents.
 ### Create Incident
 `POST /api/incidents`
 Alias: `POST /api/v1/incidents`
+Example payload:
+```json
+{
+  "title": "Database latency spike",
+  "description": "Sustained query latency across the primary cluster.",
+  "severity": "HIGH"
+}
+```
 
 ### Get Incident Details
 `GET /api/incidents/:id`
