@@ -37,8 +37,8 @@ async def analyze_incident(payload: IncidentPayload):
     try:
         analysis = await ai_engine.analyze(payload.title, payload.description)
         return analysis
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
 
 @app.post("/api/analyze", response_model=AnalysisResponse)
 @app.post("/api/v1/analyze", response_model=AnalysisResponse)
