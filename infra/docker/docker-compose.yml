@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    image: incident-atlas-backend
+    ports:
+      - "8080:8080"
+
+  ai-service:
+    image: incident-atlas-ai-service
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: incident-atlas-frontend
+    ports:
+      - "3000:3000"
