@@ -67,6 +67,8 @@ cd ../backend && go mod download
 npm run dev
 ```
 
+The local Node server exposes the dashboard and mock incident endpoints on port `3000`.
+
 For the AI service:
 
 ```bash
