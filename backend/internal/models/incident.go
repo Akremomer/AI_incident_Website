@@ -6,12 +6,27 @@ import (
 	"gorm.io/gorm"
 )
 
+type IncidentStatus string
+type Severity string
+
+const (
+	StatusOpen          IncidentStatus = "OPEN"
+	StatusInvestigating IncidentStatus = "INVESTIGATING"
+	StatusAnalyzed      IncidentStatus = "ANALYZED"
+	StatusResolved      IncidentStatus = "RESOLVED"
+
+	SeverityLow      Severity = "LOW"
+	SeverityMedium   Severity = "MEDIUM"
+	SeverityHigh     Severity = "HIGH"
+	SeverityCritical Severity = "CRITICAL"
+)
+
 type Incident struct {
 	ID          uint           `gorm:"primaryKey" json:"id"`
 	Title       string         `gorm:"not null" json:"title"`
 	Description string         `gorm:"type:text" json:"description"`
-	Severity    string         `gorm:"default:'MEDIUM'" json:"severity"`
-	Status      string         `gorm:"default:'OPEN'" json:"status"`
+	Severity    Severity       `gorm:"default:'MEDIUM'" json:"severity"`
+	Status      IncidentStatus `gorm:"default:'OPEN'" json:"status"`
 	Category    string         `json:"category"`
 	CreatedAt   time.Time      `json:"created_at"`
 	UpdatedAt   time.Time      `json:"updated_at"`

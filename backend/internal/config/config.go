@@ -8,8 +8,13 @@ type Config struct {
 }
 
 func Load() *Config {
+	aiServiceURL := os.Getenv("AI_SERVICE_URL")
+	if aiServiceURL == "" {
+		aiServiceURL = "http://localhost:8000"
+	}
+
 	return &Config{
 		DatabaseURL:  os.Getenv("DATABASE_URL"),
-		AIServiceURL: os.Getenv("AI_SERVICE_URL"),
+		AIServiceURL: aiServiceURL,
 	}
 }
