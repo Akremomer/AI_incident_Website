@@ -1,11 +1,33 @@
 # Deployment Guide
 
-## Local Development
+## Docker Development
+To start the entire stack locally:
+```bash
+docker-compose -f infra/docker/docker-compose.yml up --build
+```
 
-Use Docker Compose to start the stack locally.
+## Kubernetes Deployment
 
-## Planned Production Setup
+### 1. Create Namespace
+```bash
+kubectl create namespace ai-ops
+```
 
-- Kubernetes deployments for the backend and AI service
-- Environment-driven secrets
-- CI pipeline for validation and image builds
+### 2. Configure Secrets
+```bash
+kubectl create secret generic db-secrets --from-literal=url=postgres://... -n ai-ops
+kubectl create secret generic ai-secrets --from-literal=api-key=YOUR_KEY -n ai-ops
+```
+
+### 3. Apply Manifests
+```bash
+kubectl apply -f infra/kubernetes/ -n ai-ops
+```
+
+## CI/CD Pipeline
+The platform uses GitHub Actions (see `.github/workflows/ci.yml`) to:
+1. Run Go tests and linting.
+2. Run Python tests and linting.
+3. Build Docker images.
+4. Push to Container Registry.
+5. Deploy to K8s (Staging/Prod).

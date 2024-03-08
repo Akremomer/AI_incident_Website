@@ -1,17 +1,35 @@
-# Architecture Notes
+# AI Incident Intelligence Platform Architecture
 
-## Frontend
+## Overview
+The platform is designed as a distributed system comprising a high-performance Go API, a specialized Python AI service, and a modern React dashboard.
 
-- React dashboard rendered through Vite
-- Local Express server used for mock API responses
+## Components
 
-## Planned Services
+### 1. Backend API (Go)
+- **Responsibility**: Core business logic, data persistence, orchestration.
+- **Framework**: Gin Gonic.
+- **Database**: PostgreSQL (GORM).
+- **Key Features**: Incident lifecycle management, AI analysis triggering, structured logging.
 
-- Python AI service for incident analysis
-- Go API service for orchestration and persistence
+### 2. AI Intelligence Service (Python)
+- **Responsibility**: Natural Language Processing, log analysis, and recommendation generation.
+- **Framework**: FastAPI.
+- **Models**: Integration with LLMs (Gemini/OpenAI) via LangChain.
+- **Key Features**: Summarization, classification, severity scoring.
 
-## Next Steps
+### 3. Frontend Dashboard (React)
+- **Responsibility**: User interface for SREs and DevOps engineers.
+- **Tech Stack**: Vite, Tailwind CSS, Lucide Icons, Framer Motion.
+- **Key Features**: Real-time incident tracking, AI insights visualization, incident reporting.
 
-1. Add service boundaries
-2. Introduce deployment manifests
-3. Replace mock analysis with service calls
+## Data Flow
+1. **Ingestion**: Incidents are reported via REST API or UI.
+2. **Persistence**: Data is stored in PostgreSQL.
+3. **Analysis**: Backend triggers an async call to the AI service.
+4. **Intelligence**: AI service processes the payload and returns structured insights.
+5. **Review**: SREs review recommendations and resolve incidents.
+
+## Infrastructure
+- **Containerization**: Docker for all services.
+- **Orchestration**: Kubernetes (K8s) for production scaling.
+- **CI/CD**: GitHub Actions for automated testing and deployment.

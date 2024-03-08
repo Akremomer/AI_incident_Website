@@ -1,19 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ai-service
+  name: ai-analysis-service
+  namespace: ai-ops
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: ai-service
+      app: ai-analysis
   template:
     metadata:
       labels:
-        app: ai-service
+        app: ai-analysis
     spec:
       containers:
-        - name: ai-service
-          image: incident-atlas-ai-service
-          ports:
-            - containerPort: 8000
+      - name: ai-service
+        image: your-registry/ai-service:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: AI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-secrets
+              key: api-key
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"
