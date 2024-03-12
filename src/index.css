@@ -63,6 +63,10 @@ body {
   color: rgba(168, 184, 197, 0.72);
 }
 
+.field-input:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(248, 177, 74, 0.35) rgba(255, 255, 255, 0.03);
