@@ -36,6 +36,10 @@ async function startServer() {
     res.json(incidents);
   });
 
+  app.get("/api/health", (_req, res) => {
+    res.json({ status: "ok" });
+  });
+
   app.post("/api/incidents", async (req, res) => {
     const { title, description, severity } = req.body;
     const newIncident = {
