@@ -36,3 +36,8 @@ The platform uses GitHub Actions (see `.github/workflows/ci.yml`) to:
 3. Build Docker images.
 4. Push to Container Registry.
 5. Deploy to K8s (Staging/Prod).
+
+## Troubleshooting
+
+- Confirm `AI_SERVICE_URL` points to the FastAPI service before triggering backend analysis.
+- Check that Postgres is reachable before starting the Go API locally.
