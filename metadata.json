@@ -1,0 +1,5 @@
+{
+  "name": "AI Incident Intelligence Platform",
+  "description": "A production-grade AI-powered incident analysis and DevOps intelligence platform for SRE and DevOps teams.",
+  "requestFramePermissions": []
+}
