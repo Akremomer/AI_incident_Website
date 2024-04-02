@@ -6,6 +6,11 @@ To start the entire stack locally:
 docker-compose -f infra/docker/docker-compose.yml up --build
 ```
 
+Frontend-only development is also supported with:
+```bash
+npm run dev
+```
+
 ## Kubernetes Deployment
 
 ### 1. Create Namespace
